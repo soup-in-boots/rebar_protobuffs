@@ -38,25 +38,33 @@ do(State) ->
                     error -> "proto";
                     {ok, Found} -> Found
                 end,
-                OutDir      = rebar_app_info:ebin_dir(AppInfo),
                 InclDir     = filename:join([rebar_app_info:out_dir(AppInfo), "include"]),
                 SourceDir   = filename:join([rebar_app_info:dir(AppInfo), ProtoDir]),
                 FoundFiles  = rebar_utils:find_files(SourceDir, ".*\\.proto\$"),
 
                 CompileFun  = fun(Source, Opts1) ->
-                        do_compile(Source, InclDir, OutDir, Opts1)
+                        do_compile(Source, filename:join([rebar_app_info:dir(AppInfo), "src"]), filename:join([rebar_app_info:dir(AppInfo), "priv"]), InclDir, Opts1)
                 end,
 
                 rebar_base_compiler:run(Opts, [], FoundFiles, CompileFun)
         end, Apps),
     {ok, State}.
 
-do_compile(Source, InclDir, OutDir, _Opts1) ->
+do_compile(Source, SrcDir, OutDir, InclDir, _Opts1) ->
     Opts = [
-        {output_include_dir, InclDir},
-        {output_ebin_dir, OutDir}
+        {o_hrl, InclDir},
+        {o_erl, SrcDir},
+        {o_nif_cc, OutDir},
+        {nif, true},
+        {maps, false},
+        {type_specs, true},
+        {verify, always},
+        {strings_as_binaries, true},
+        {defs_as_proplists, false},
+        report,
+        warnings_as_errors
     ],
-    protobuffs_compile:scan_file(Source, Opts).
+    gpb_compile:file(Source, Opts).
 
 
 -spec format_error(any()) ->  iolist().
