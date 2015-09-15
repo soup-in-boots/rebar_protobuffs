@@ -3,7 +3,7 @@
 -export([init/1, do/1, format_error/1]).
 
 -define(PROVIDER, 'compile').
--define(DEPS, [{default, compile}]).
+-define(DEPS, [app_discovery]).
 
 %% ===================================================================
 %% Public API
@@ -34,7 +34,6 @@ do(State) ->
     end,
     lists:foreach(fun(AppInfo) ->
                 Opts        = rebar_app_info:opts(AppInfo),
-                io:format("~p~n", [Opts]),
                 ProtoDir    = case dict:find(proto_dir, Opts) of
                     error -> "proto";
                     {ok, Found} -> Found
