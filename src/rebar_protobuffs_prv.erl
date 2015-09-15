@@ -61,7 +61,7 @@ do_compile(Source, SrcDir, InclDir, _Opts1) ->
         {type_specs, true},
         {verify, always},
         {strings_as_binaries, true},
-        {defs_as_proplists, false},
+        {defs_as_proplists, true},
         report,
         warnings_as_errors
     ],
