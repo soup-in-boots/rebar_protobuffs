@@ -38,10 +38,9 @@ do(State) ->
                     error -> "proto";
                     {ok, Found} -> Found
                 end,
-                OutDir      = rebar_app_info:out_dir(AppInfo),
-                BaseDir     = rebar_app_info:dir(AppInfo),
-                InclDir     = filename:join([BaseDir, "include"]),
-                SourceDir   = filename:join([BaseDir, ProtoDir]),
+                OutDir      = rebar_app_info:ebin_dir(AppInfo),
+                InclDir     = filename:join([rebar_app_info:out_dir(AppInfo), "include"]),
+                SourceDir   = filename:join([rebar_app_info:dir(AppInfo), ProtoDir]),
                 FoundFiles  = rebar_utils:find_files(SourceDir, ".*\\.proto\$"),
 
                 CompileFun  = fun(Source, Opts1) ->
