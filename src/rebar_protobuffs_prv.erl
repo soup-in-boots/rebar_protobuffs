@@ -54,6 +54,7 @@ do_compile(Source, SrcDir, OutDir, InclDir, _Opts1) ->
     Opts = [
         {o_hrl, InclDir},
         {o_erl, SrcDir},
+        {i, SrcDir},
         {o_nif_cc, OutDir},
         {nif, true},
         {maps, false},
