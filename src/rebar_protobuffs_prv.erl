@@ -34,29 +34,29 @@ do(State) ->
     end,
     lists:foreach(fun(AppInfo) ->
                 Opts        = rebar_app_info:opts(AppInfo),
+                io:format("~p~n", [Opts]),
                 ProtoDir    = case dict:find(proto_dir, Opts) of
                     error -> "proto";
                     {ok, Found} -> Found
                 end,
                 InclDir     = filename:join([rebar_app_info:out_dir(AppInfo), "include"]),
-                SourceDir   = filename:join([rebar_app_info:dir(AppInfo), ProtoDir]),
-                FoundFiles  = rebar_utils:find_files(SourceDir, ".*\\.proto\$"),
+                SrcDir      = filename:join([rebar_app_info:dir(AppInfo), "src"]),
+                InputDir    = filename:join([rebar_app_info:dir(AppInfo), ProtoDir]),
+                FoundFiles  = rebar_utils:find_files(InputDir, ".*\\.proto\$"),
 
                 CompileFun  = fun(Source, Opts1) ->
-                        do_compile(Source, filename:join([rebar_app_info:dir(AppInfo), "src"]), filename:join([rebar_app_info:dir(AppInfo), "priv"]), InclDir, Opts1)
+                        do_compile(Source, SrcDir, InclDir, Opts1)
                 end,
 
                 rebar_base_compiler:run(Opts, [], FoundFiles, CompileFun)
         end, Apps),
     {ok, State}.
 
-do_compile(Source, SrcDir, OutDir, InclDir, _Opts1) ->
+do_compile(Source, SrcDir, InclDir, _Opts1) ->
     Opts = [
         {o_hrl, InclDir},
         {o_erl, SrcDir},
         {i, SrcDir},
-        {o_nif_cc, OutDir},
-        {nif, true},
         {maps, false},
         {type_specs, true},
         {verify, always},
