@@ -1,15 +1,15 @@
-{application, 'rebar_protobuffs',
- [{description, "A rebar plugin"},
-  {vsn, "0.1.0"},
-  {registered, []},
-  {applications,
-   [kernel,
-    stdlib
-   ]},
-  {env,[]},
-  {modules, []},
-
-  {contributors, []},
-  {licenses, []},
-  {links, []}
- ]}.
+{application, 'rebar_protobuffs', [
+        {description, "A rebar plugin"},
+        {vsn, "0.1.0"},
+        {registered, []},
+        {applications,
+            [
+                kernel,
+                stdlib,
+                gpb
+            ]},
+        {env,[]},
+        {modules, []},
+        {licenses, ["BSD 3-clause Revised"]},
+        {links, []}
+    ]}.
