@@ -38,10 +38,13 @@ do(State) ->
                     error -> "proto";
                     {ok, Found} -> Found
                 end,
-                InclDir     = filename:join([rebar_app_info:out_dir(AppInfo), "include"]),
+                InclDir     = filename:join([rebar_app_info:dir(AppInfo), "include"]),
                 SrcDir      = filename:join([rebar_app_info:dir(AppInfo), "src"]),
                 InputDir    = filename:join([rebar_app_info:dir(AppInfo), ProtoDir]),
                 FoundFiles  = rebar_utils:find_files(InputDir, ".*\\.proto\$"),
+
+                ok = filelib:ensure_dir(lists:append(InclDir, "/")),
+                ok = filelib:ensure_dir(lists:append(SrcDir, "/")),
 
                 CompileFun  = fun(Source, Opts1) ->
                         do_compile(Source, SrcDir, InclDir, Opts1)
